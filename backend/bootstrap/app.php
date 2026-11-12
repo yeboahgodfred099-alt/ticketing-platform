@@ -15,16 +15,18 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->statefulApi();
         
+        $middleware->append(\App\Http\Middleware\AttachRequestId::class);
+
         $middleware->validateCsrfTokens(except: [
             'api/v1/webhooks/*',
         ]);
         
         $middleware->alias([
             'mfa' => \App\Http\Middleware\EnsureMfaVerified::class,
+            'reauth' => \App\Http\Middleware\RequireReauthentication::class,
             'raw_body' => \App\Http\Middleware\CaptureRawBody::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // Controlled JSON exception responses for API
     })->create();
-
