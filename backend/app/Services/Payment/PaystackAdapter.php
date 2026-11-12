@@ -150,3 +150,4 @@ class PaystackAdapter
         return $body;
     }
 }
+

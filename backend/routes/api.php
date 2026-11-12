@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\V1\Public\CheckoutController;
 use App\Http\Controllers\Api\V1\Public\EventController as PublicEventController;
 use App\Http\Controllers\Api\V1\Public\HealthController;
 use App\Http\Controllers\Api\V1\Public\PaymentController;
+use App\Http\Controllers\Api\V1\Public\PaystackWebhookController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -105,7 +106,9 @@ Route::prefix('staff')->middleware('auth:sanctum')->group(function () {
     // Phase 8: Gate scan & atomic check-in
 });
 
-// Paystack Webhooks Route Group
+// Paystack Webhooks Route Group (Phase 6)
 Route::prefix('webhooks')->group(function () {
-    // Phase 6: Paystack webhook
+    Route::post('/paystack', [PaystackWebhookController::class, 'handle'])
+        ->middleware('throttle:120,1')
+        ->name('api.v1.webhooks.paystack');
 });

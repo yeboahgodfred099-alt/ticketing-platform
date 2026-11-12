@@ -70,3 +70,4 @@ class InitiatePaymentRequest extends FormRequest
         return $this->resolvedOrder!;
     }
 }
+

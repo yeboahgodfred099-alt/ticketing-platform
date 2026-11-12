@@ -41,3 +41,4 @@ class SubmitOtpRequest extends FormRequest
         ];
     }
 }
+
