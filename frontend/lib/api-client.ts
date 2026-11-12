@@ -72,3 +72,4 @@ export async function apiClient<T = unknown>(
 
   return response.json();
 }
+

@@ -28,3 +28,4 @@ export const GHANA_MOBILE_MONEY_NETWORKS = [
 
 export type MobileMoneyProviderCode =
   (typeof GHANA_MOBILE_MONEY_NETWORKS)[number]["code"];
+

@@ -56,3 +56,4 @@ export function formatEventDate(
     return dateString;
   }
 }
+
