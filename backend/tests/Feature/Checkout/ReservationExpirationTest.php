@@ -107,3 +107,4 @@ class ReservationExpirationTest extends TestCase
         $this->assertSame(OrderStatus::PENDING_PAYMENT, $order->status);
     }
 }
+

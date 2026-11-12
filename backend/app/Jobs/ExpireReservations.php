@@ -94,3 +94,4 @@ class ExpireReservations implements ShouldQueue
         return $expiredCount;
     }
 }
+

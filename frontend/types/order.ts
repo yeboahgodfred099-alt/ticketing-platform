@@ -37,3 +37,28 @@ export interface OrderData {
     timezone: string;
   };
 }
+
+export interface PaymentInitiateResponse {
+  status: "pending" | "requires_action" | "success" | "failed";
+  reference: string;
+  order_number: string;
+  display_text: string;
+  timeout_seconds?: number;
+  action?: "send_otp";
+}
+
+export interface PaymentStatusResponse {
+  found: boolean;
+  reference: string;
+  order_number: string;
+  status: "pending" | "requires_action" | "success" | "failed" | "expired" | "abandoned";
+  amount_minor: number;
+  amount_major: string;
+  currency: string;
+  provider: string;
+  display_text: string;
+  is_final: boolean;
+  expires_at: string | null;
+}
+
+

@@ -237,3 +237,4 @@ class CheckoutTest extends TestCase
         $wrongTokenResponse->assertStatus(403);
     }
 }
+

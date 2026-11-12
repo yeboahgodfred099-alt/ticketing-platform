@@ -74,3 +74,4 @@ class CheckoutController extends Controller
         return (new OrderResource($order))->response();
     }
 }
+

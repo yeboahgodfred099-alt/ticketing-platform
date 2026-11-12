@@ -67,3 +67,4 @@ class PhoneNormalizerTest extends TestCase
         PhoneNormalizer::normalize('024');
     }
 }
+

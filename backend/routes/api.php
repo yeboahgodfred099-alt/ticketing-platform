@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\V1\Auth\MfaController;
 use App\Http\Controllers\Api\V1\Public\CheckoutController;
 use App\Http\Controllers\Api\V1\Public\EventController as PublicEventController;
 use App\Http\Controllers\Api\V1\Public\HealthController;
+use App\Http\Controllers\Api\V1\Public\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -85,7 +86,17 @@ Route::prefix('public')->group(function () {
         ->middleware('throttle:30,1')
         ->name('api.v1.public.orders.show');
 
-    // Phase 5: Payment status
+    // Phase 5: Mobile Money Payments
+    Route::post('/payments/initiate', [PaymentController::class, 'initiate'])
+        ->middleware('throttle:10,1')
+        ->name('api.v1.public.payments.initiate');
+    Route::post('/payments/submit-otp', [PaymentController::class, 'submitOtp'])
+        ->middleware('throttle:10,1')
+        ->name('api.v1.public.payments.submit-otp');
+    Route::get('/payments/{reference}/status', [PaymentController::class, 'status'])
+        ->middleware('throttle:60,1')
+        ->name('api.v1.public.payments.status');
+
     // Phase 7: Ticket retrieval
 });
 

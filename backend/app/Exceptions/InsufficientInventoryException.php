@@ -18,3 +18,4 @@ class InsufficientInventoryException extends Exception
         );
     }
 }
+
