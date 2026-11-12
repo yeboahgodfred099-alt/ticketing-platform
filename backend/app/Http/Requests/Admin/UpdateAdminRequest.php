@@ -31,3 +31,4 @@ class UpdateAdminRequest extends FormRequest
         ];
     }
 }
+

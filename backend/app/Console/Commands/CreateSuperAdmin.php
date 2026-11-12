@@ -104,3 +104,4 @@ class CreateSuperAdmin extends Command
         return self::SUCCESS;
     }
 }
+

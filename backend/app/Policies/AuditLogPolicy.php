@@ -28,3 +28,4 @@ class AuditLogPolicy
         return false; // Audit logs cannot be deleted
     }
 }
+

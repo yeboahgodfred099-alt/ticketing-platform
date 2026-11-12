@@ -61,3 +61,4 @@ class AdminPolicy
         return $user->hasPermission('admins.disable');
     }
 }
+

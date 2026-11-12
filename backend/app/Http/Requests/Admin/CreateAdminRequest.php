@@ -37,3 +37,4 @@ class CreateAdminRequest extends FormRequest
         ];
     }
 }
+

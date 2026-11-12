@@ -25,3 +25,4 @@ class AssignRoleRequest extends FormRequest
         ];
     }
 }
+

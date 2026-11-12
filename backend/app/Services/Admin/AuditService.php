@@ -92,3 +92,4 @@ class AuditService
         return $sanitized;
     }
 }
+

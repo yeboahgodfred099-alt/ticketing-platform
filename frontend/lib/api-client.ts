@@ -37,7 +37,7 @@ export async function apiClient<T = unknown>(
 
   const defaultHeaders: Record<string, string> = {
     Accept: "application/json",
-    "Content-Type": "application/json",
+    ...(options.body instanceof FormData ? {} : { "Content-Type": "application/json" }),
   };
 
   const response = await fetch(url, {

@@ -1,8 +1,38 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { formatMoney } from "@/lib/utils";
 import { GHANA_MOBILE_MONEY_NETWORKS } from "@/lib/constants";
+import { apiClient } from "@/lib/api-client";
+import { EventItem } from "@/types/event";
+import { EventGrid } from "@/components/events/EventGrid";
 
 export default function Home() {
+  const [events, setEvents] = useState<EventItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    apiClient<{ data: EventItem[] }>("/api/v1/public/events")
+      .then((res) => {
+        if (isMounted) {
+          setEvents(res.data);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setEvents([]);
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
       {/* Navigation */}
@@ -15,8 +45,8 @@ export default function Home() {
           </div>
           <nav className="flex items-center gap-4">
             <Link
-              href="/admin/login"
-              className="text-sm text-slate-400 hover:text-white transition-colors"
+              href="/login"
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
             >
               Organizer Login
             </Link>
@@ -25,7 +55,7 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <main className="flex-1 max-w-6xl mx-auto px-4 py-16 flex flex-col justify-center">
+      <main className="flex-1 max-w-6xl mx-auto px-4 py-16 flex flex-col justify-center w-full">
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-emerald-950/60 border border-emerald-800 text-emerald-400 mb-6">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -46,7 +76,7 @@ export default function Home() {
               href="#upcoming"
               className="px-6 py-3 rounded-lg font-medium bg-emerald-500 hover:bg-emerald-600 text-slate-950 transition-colors shadow-lg shadow-emerald-500/20"
             >
-              Browse Events
+              Browse Events ↓
             </a>
             <Link
               href="/api/health"
@@ -76,8 +106,22 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Featured Events Section */}
+        <section id="upcoming" className="mt-24 space-y-6">
+          <div className="flex justify-between items-end">
+            <div>
+              <h2 className="text-2xl font-bold text-white tracking-tight">Upcoming Events</h2>
+              <p className="text-xs text-slate-400 mt-1">
+                Verified ticket sales currently live in Ghana.
+              </p>
+            </div>
+          </div>
+
+          <EventGrid events={events} loading={loading} />
+        </section>
+
         {/* Feature Cards */}
-        <section id="upcoming" className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <section className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="p-6 rounded-xl bg-slate-900/60 border border-slate-800/80">
             <div className="text-emerald-400 text-2xl font-bold mb-2">Instant Delivery</div>
             <p className="text-sm text-slate-400">
@@ -100,7 +144,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/80 py-8 bg-slate-950 text-slate-400 text-xs text-center">
+      <footer className="border-t border-slate-800/80 py-8 bg-slate-950 text-slate-400 text-xs text-center mt-20">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div>© 2026 ClevaWave Ticketing. Built for Ghana.</div>
           <div className="flex gap-4">

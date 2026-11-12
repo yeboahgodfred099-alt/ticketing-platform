@@ -1,12 +1,15 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Admin\AdminController;
+use App\Http\Controllers\Api\V1\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Api\V1\Admin\ProfileController;
 use App\Http\Controllers\Api\V1\Admin\RoleController;
+use App\Http\Controllers\Api\V1\Admin\TicketTypeController as AdminTicketTypeController;
 use App\Http\Controllers\Api\V1\Auth\ConfirmPasswordController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\LogoutController;
 use App\Http\Controllers\Api\V1\Auth\MfaController;
+use App\Http\Controllers\Api\V1\Public\EventController as PublicEventController;
 use App\Http\Controllers\Api\V1\Public\HealthController;
 use Illuminate\Support\Facades\Route;
 
@@ -48,11 +51,30 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'mfa'])->group(function () {
 
     // Roles and Permissions Catalog
     Route::get('/roles', [RoleController::class, 'index'])->name('api.v1.admin.roles.index');
+
+    // Event Management (Phase 3)
+    Route::get('/events', [AdminEventController::class, 'index'])->name('api.v1.admin.events.index');
+    Route::post('/events', [AdminEventController::class, 'store'])->name('api.v1.admin.events.store');
+    Route::get('/events/{event}', [AdminEventController::class, 'show'])->name('api.v1.admin.events.show');
+    Route::patch('/events/{event}', [AdminEventController::class, 'update'])->name('api.v1.admin.events.update');
+    Route::post('/events/{event}/publish', [AdminEventController::class, 'publish'])->name('api.v1.admin.events.publish');
+    Route::post('/events/{event}/unpublish', [AdminEventController::class, 'unpublish'])->name('api.v1.admin.events.unpublish');
+    Route::post('/events/{event}/cancel', [AdminEventController::class, 'cancel'])->name('api.v1.admin.events.cancel');
+    Route::post('/events/{event}/archive', [AdminEventController::class, 'archive'])->name('api.v1.admin.events.archive');
+    Route::post('/events/{event}/banner', [AdminEventController::class, 'uploadBanner'])->name('api.v1.admin.events.banner');
+
+    // Ticket Types Management (Phase 3)
+    Route::get('/events/{event}/ticket-types', [AdminTicketTypeController::class, 'index'])->name('api.v1.admin.ticket-types.index');
+    Route::post('/events/{event}/ticket-types', [AdminTicketTypeController::class, 'store'])->name('api.v1.admin.ticket-types.store');
+    Route::get('/events/{event}/ticket-types/{ticketType}', [AdminTicketTypeController::class, 'show'])->name('api.v1.admin.ticket-types.show');
+    Route::patch('/events/{event}/ticket-types/{ticketType}', [AdminTicketTypeController::class, 'update'])->name('api.v1.admin.ticket-types.update');
+    Route::post('/events/{event}/ticket-types/{ticketType}/archive', [AdminTicketTypeController::class, 'archive'])->name('api.v1.admin.ticket-types.archive');
 });
 
-// Public Route Group
+// Public Route Group (Phase 3: Events Catalog)
 Route::prefix('public')->group(function () {
-    // Phase 3: Events
+    Route::get('/events', [PublicEventController::class, 'index'])->name('api.v1.public.events.index');
+    Route::get('/events/{slug}', [PublicEventController::class, 'show'])->name('api.v1.public.events.show');
     // Phase 4: Checkout
     // Phase 5: Payment status
     // Phase 7: Ticket retrieval

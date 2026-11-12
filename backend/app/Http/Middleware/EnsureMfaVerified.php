@@ -59,3 +59,4 @@ class EnsureMfaVerified
         return $next($request);
     }
 }
+

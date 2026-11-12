@@ -79,3 +79,4 @@ class MfaTest extends TestCase
         $this->assertEquals(['RECOV-2222'], $admin->mfa_recovery_codes);
     }
 }
+

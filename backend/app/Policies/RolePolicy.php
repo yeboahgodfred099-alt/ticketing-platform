@@ -27,3 +27,4 @@ class RolePolicy
         return $user->hasPermission('roles.manage');
     }
 }
+

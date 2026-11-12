@@ -23,3 +23,4 @@ class ConfirmPasswordRequest extends FormRequest
         ];
     }
 }
+

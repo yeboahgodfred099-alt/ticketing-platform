@@ -29,3 +29,4 @@ class RequireReauthentication
         return $next($request);
     }
 }
+

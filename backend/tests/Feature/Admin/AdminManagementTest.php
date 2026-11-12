@@ -95,3 +95,4 @@ class AdminManagementTest extends TestCase
         $this->assertTrue($superAdmin->fresh()->is_active);
     }
 }
+
