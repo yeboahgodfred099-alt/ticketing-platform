@@ -1,0 +1,17 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app/
+        - config/
+        - database/
+        - routes/
+
+    # Level 8 is strong static analysis for Laravel
+    level: 8
+
+    ignoreErrors: []
+
+    checkMissingIterableValueType: false
+

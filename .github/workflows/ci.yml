@@ -1,0 +1,119 @@
+name: CI / Quality Gate
+
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+    branches: [main, staging]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ─── Frontend Verification ───────────────────────────────────────────
+  frontend:
+    name: Frontend (Lint, Typecheck, Build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: frontend/package.json
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run TypeScript Typecheck
+        run: npx tsc --noEmit
+
+      - name: Production Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8000/api/v1
+
+  # ─── Backend Verification ────────────────────────────────────────────
+  backend:
+    name: Backend (Pint, PHPStan, Tests)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: ticketing_test
+          POSTGRES_USER: ticketing_app
+          POSTGRES_PASSWORD: secret_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: pdo_pgsql, pgsql, redis, bcmath, pcntl, gd, zip, intl
+          coverage: none
+
+      - name: Install Dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Run Laravel Pint (Code Style)
+        run: ./vendor/bin/pint --test
+
+      - name: Run PHPStan (Static Analysis)
+        run: ./vendor/bin/phpstan analyse --error-format=github
+
+      - name: Run Feature and Unit Tests
+        run: php artisan test
+        env:
+          DB_CONNECTION: pgsql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5432
+          DB_DATABASE: ticketing_test
+          DB_USERNAME: ticketing_app
+          DB_PASSWORD: secret_password
+          REDIS_HOST: 127.0.0.1
+          REDIS_PORT: 6379
+
+  # ─── Docker Verification ─────────────────────────────────────────────
+  docker:
+    name: Docker Build Verification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Validate Docker Compose Config
+        run: docker compose config -q
