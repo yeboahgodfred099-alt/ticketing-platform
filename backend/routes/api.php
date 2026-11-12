@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\Auth\ConfirmPasswordController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\LogoutController;
 use App\Http\Controllers\Api\V1\Auth\MfaController;
+use App\Http\Controllers\Api\V1\Public\CheckoutController;
 use App\Http\Controllers\Api\V1\Public\EventController as PublicEventController;
 use App\Http\Controllers\Api\V1\Public\HealthController;
 use Illuminate\Support\Facades\Route;
@@ -71,11 +72,19 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'mfa'])->group(function () {
     Route::post('/events/{event}/ticket-types/{ticketType}/archive', [AdminTicketTypeController::class, 'archive'])->name('api.v1.admin.ticket-types.archive');
 });
 
-// Public Route Group (Phase 3: Events Catalog)
+// Public Route Group (Phase 3: Events Catalog, Phase 4: Checkout)
 Route::prefix('public')->group(function () {
     Route::get('/events', [PublicEventController::class, 'index'])->name('api.v1.public.events.index');
     Route::get('/events/{slug}', [PublicEventController::class, 'show'])->name('api.v1.public.events.show');
-    // Phase 4: Checkout
+
+    // Phase 4: Anonymous Checkout & Order Retrieval
+    Route::post('/checkout', [CheckoutController::class, 'checkout'])
+        ->middleware('throttle:15,1')
+        ->name('api.v1.public.checkout');
+    Route::get('/orders/{orderNumber}', [CheckoutController::class, 'show'])
+        ->middleware('throttle:30,1')
+        ->name('api.v1.public.orders.show');
+
     // Phase 5: Payment status
     // Phase 7: Ticket retrieval
 });
