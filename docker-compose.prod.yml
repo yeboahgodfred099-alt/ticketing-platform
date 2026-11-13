@@ -52,7 +52,14 @@ services:
     environment:
       - APP_ENV=production
       - APP_DEBUG=false
+      - APP_KEY=${APP_KEY}
       - APP_URL=https://ticket.clevawave.com
+      - SESSION_DRIVER=${SESSION_DRIVER:-database}
+      - SESSION_DOMAIN=${SESSION_DOMAIN:-.clevawave.com}
+      - SESSION_SECURE_COOKIE=${SESSION_SECURE_COOKIE:-true}
+      - SESSION_HTTP_ONLY=${SESSION_HTTP_ONLY:-true}
+      - SESSION_SAME_SITE=${SESSION_SAME_SITE:-lax}
+      - SANCTUM_STATEFUL_DOMAINS=${SANCTUM_STATEFUL_DOMAINS:-ticket.clevawave.com}
       - DB_CONNECTION=pgsql
       - DB_HOST=postgres
       - DB_PORT=5432
@@ -95,6 +102,7 @@ services:
       - ./backend:/var/www/html
     environment:
       - APP_ENV=production
+      - APP_KEY=${APP_KEY}
       - DB_CONNECTION=pgsql
       - DB_HOST=postgres
       - DB_PORT=5432
@@ -126,6 +134,7 @@ services:
       - ./backend:/var/www/html
     environment:
       - APP_ENV=production
+      - APP_KEY=${APP_KEY}
       - DB_CONNECTION=pgsql
       - DB_HOST=postgres
       - DB_PORT=5432
