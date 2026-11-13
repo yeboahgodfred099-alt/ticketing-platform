@@ -156,3 +156,4 @@ class ReconciliationTest extends TestCase
         $this->assertSame(PaymentStatus::PENDING, $payment->status);
     }
 }
+

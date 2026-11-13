@@ -26,3 +26,4 @@ class ReconcilePaymentsCommand extends Command
         return self::SUCCESS;
     }
 }
+

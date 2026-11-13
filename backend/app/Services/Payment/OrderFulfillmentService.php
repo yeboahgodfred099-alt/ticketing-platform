@@ -12,6 +12,7 @@ use App\Models\InventoryReservation;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\TicketType;
+use App\Services\Tickets\TicketIssuanceService;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,8 @@ use Illuminate\Support\Facades\Log;
 class OrderFulfillmentService
 {
     public function __construct(
-        protected PaystackAdapter $paystackAdapter
+        protected PaystackAdapter $paystackAdapter,
+        protected TicketIssuanceService $ticketIssuanceService
     ) {}
 
     /**
@@ -156,9 +158,13 @@ class OrderFulfillmentService
                 'paid_at' => $now,
             ]);
 
-            Log::info("Order {$order->order_number} successfully fulfilled for payment reference {$reference}.");
+            // 8. Atomically issue tickets and queue delivery
+            $this->ticketIssuanceService->issueTickets($order);
+
+            Log::info("Order {$order->order_number} successfully fulfilled and tickets issued for payment reference {$reference}.");
 
             return $order->load(['items', 'event']);
         });
     }
 }
+

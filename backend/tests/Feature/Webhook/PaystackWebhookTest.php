@@ -289,3 +289,4 @@ class PaystackWebhookTest extends TestCase
         $this->assertSame(OrderStatus::PENDING_PAYMENT, $this->order->status);
     }
 }
+

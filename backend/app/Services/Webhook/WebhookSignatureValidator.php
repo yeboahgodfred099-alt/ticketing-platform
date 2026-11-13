@@ -37,3 +37,4 @@ class WebhookSignatureValidator
         return hash_equals($expectedSignature, $signature);
     }
 }
+

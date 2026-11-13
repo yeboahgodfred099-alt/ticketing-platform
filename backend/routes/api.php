@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\V1\Public\EventController as PublicEventController;
 use App\Http\Controllers\Api\V1\Public\HealthController;
 use App\Http\Controllers\Api\V1\Public\PaymentController;
 use App\Http\Controllers\Api\V1\Public\PaystackWebhookController;
+use App\Http\Controllers\Api\V1\Public\TicketController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -99,6 +100,9 @@ Route::prefix('public')->group(function () {
         ->name('api.v1.public.payments.status');
 
     // Phase 7: Ticket retrieval
+    Route::get('/tickets/{accessToken}', [TicketController::class, 'show'])
+        ->middleware('throttle:30,1')
+        ->name('api.v1.public.tickets.show');
 });
 
 // Gate Staff Route Group

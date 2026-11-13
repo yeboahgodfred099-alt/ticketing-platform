@@ -97,3 +97,4 @@ class PaystackWebhookController extends Controller
         ], Response::HTTP_OK);
     }
 }
+
