@@ -1,6 +1,6 @@
 # ClevaWave Ticketing Platform
 
-> Secure, production-ready event ticketing platform for Ghana. Customers purchase tickets via Paystack Mobile Money without creating an account. Built with **Laravel 11**, **Next.js 15**, **PostgreSQL 16**, and **Redis 7**.
+> Secure, production-ready event ticketing platform for Ghana. Customers purchase tickets via Paystack Mobile Money wnithout creating an account. Built with **Laravel 11**, **Next.js 15**, **PostgreSQL 16**, and **Redis 7**.
 
 ---
 
