@@ -1,10 +1,20 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { eventStore } from "@/lib/demo-store";
 
-export async function POST() {
+export const dynamic = "force-dynamic";
+
+export async function POST(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const event = eventStore.setBanner(
+    id,
+    "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200"
+  );
+
   return NextResponse.json({
-    data: {
-      banner_url: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200",
-    },
+    data: event,
     message: "Banner uploaded successfully.",
   });
 }
