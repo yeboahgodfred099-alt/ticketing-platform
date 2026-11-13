@@ -79,3 +79,4 @@ class CheckInController extends Controller
         ], Response::HTTP_OK);
     }
 }
+

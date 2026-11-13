@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Admin\AdminController;
+use App\Http\Controllers\Api\V1\Admin\AuditLogController;
 use App\Http\Controllers\Api\V1\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Api\V1\Admin\ProfileController;
+use App\Http\Controllers\Api\V1\Admin\ReportController;
 use App\Http\Controllers\Api\V1\Admin\RoleController;
 use App\Http\Controllers\Api\V1\Admin\TicketTypeController as AdminTicketTypeController;
 use App\Http\Controllers\Api\V1\Auth\ConfirmPasswordController;
@@ -74,6 +76,14 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'mfa'])->group(function () {
     Route::get('/events/{event}/ticket-types/{ticketType}', [AdminTicketTypeController::class, 'show'])->name('api.v1.admin.ticket-types.show');
     Route::patch('/events/{event}/ticket-types/{ticketType}', [AdminTicketTypeController::class, 'update'])->name('api.v1.admin.ticket-types.update');
     Route::post('/events/{event}/ticket-types/{ticketType}/archive', [AdminTicketTypeController::class, 'archive'])->name('api.v1.admin.ticket-types.archive');
+
+    // Reporting & Analytics (Phase 9)
+    Route::get('/reports/overview', [ReportController::class, 'overview'])->name('api.v1.admin.reports.overview');
+    Route::get('/reports/orders/export', [ReportController::class, 'exportOrders'])->name('api.v1.admin.reports.orders.export');
+    Route::get('/reports/attendees/export', [ReportController::class, 'exportAttendees'])->name('api.v1.admin.reports.attendees.export');
+
+    // Immutable Audit Logs (Phase 9)
+    Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('api.v1.admin.audit-logs.index');
 });
 
 // Public Route Group (Phase 3: Events Catalog, Phase 4: Checkout)

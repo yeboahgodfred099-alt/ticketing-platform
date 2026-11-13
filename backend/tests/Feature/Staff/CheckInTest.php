@@ -257,3 +257,4 @@ class CheckInTest extends TestCase
         ]);
     }
 }
+
