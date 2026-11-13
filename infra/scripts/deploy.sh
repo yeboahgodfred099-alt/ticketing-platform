@@ -47,3 +47,4 @@ echo "✅ Deployment completed successfully!"
 echo "Next step: If this is the initial deployment, provision the Super Admin:"
 echo "  docker compose -f docker-compose.prod.yml exec backend php artisan admin:create-super"
 echo "=========================================================="
+
