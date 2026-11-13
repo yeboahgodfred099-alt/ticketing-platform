@@ -150,3 +150,4 @@ The script validates row counts on `events`, `orders`, and `tickets` upon comple
 | `php artisan queue:work --tries=3` | Run the background job worker |
 | `php artisan config:cache` | Cache production configuration |
 | `php artisan route:cache` | Cache API routing table |
+

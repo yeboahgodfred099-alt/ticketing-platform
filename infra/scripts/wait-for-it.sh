@@ -21,3 +21,4 @@ done
 
 echo "ERROR: Timeout reached waiting for ${HOST}:${PORT}."
 exit 1
+

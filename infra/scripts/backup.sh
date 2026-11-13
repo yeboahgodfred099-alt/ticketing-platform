@@ -51,3 +51,4 @@ echo "[$(date -u)] Enforcing 30-day backup retention policy..."
 find "${BACKUP_DIR}" -type f -name "ticketing_*.sql.gz*" -mtime +30 -delete
 
 echo "[$(date -u)] Backup routine completed successfully."
+

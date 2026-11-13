@@ -20,3 +20,4 @@ export interface AuditLogPaginationMeta {
   to: number | null;
   total: number;
 }
+

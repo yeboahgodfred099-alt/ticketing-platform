@@ -1,0 +1,60 @@
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  return NextResponse.json({
+    data: [
+      {
+        id: "ord-001",
+        order_number: "ORD-2026-8921",
+        customer_name: "Kwame Mensah",
+        customer_email: "kwame@example.com",
+        customer_phone: "+233 24 *** *567",
+        event_name: "Accra Music & Culture Summit 2026",
+        total_amount: 10000,
+        currency: "GHS",
+        status: "paid",
+        ticket_count: 1,
+        created_at: new Date(Date.now() - 3600000 * 2).toISOString(),
+      },
+      {
+        id: "ord-002",
+        order_number: "ORD-2026-8922",
+        customer_name: "Ama Serwaa",
+        customer_email: "ama@example.com",
+        customer_phone: "+233 50 *** *890",
+        event_name: "Accra Music & Culture Summit 2026",
+        total_amount: 35000,
+        currency: "GHS",
+        status: "paid",
+        ticket_count: 1,
+        created_at: new Date(Date.now() - 3600000 * 4).toISOString(),
+      },
+      {
+        id: "ord-003",
+        order_number: "ORD-2026-8923",
+        customer_name: "Kofi Boateng",
+        customer_email: "kofi@example.com",
+        customer_phone: "+233 27 *** *123",
+        event_name: "Ghana Tech Founders Expo 2026",
+        total_amount: 15000,
+        currency: "GHS",
+        status: "pending_payment",
+        ticket_count: 1,
+        created_at: new Date(Date.now() - 600000).toISOString(),
+      },
+      {
+        id: "ord-004",
+        order_number: "ORD-2026-8920",
+        customer_name: "Abena Osei",
+        customer_email: "abena@example.com",
+        customer_phone: "+233 20 *** *456",
+        event_name: "Accra Music & Culture Summit 2026",
+        total_amount: 5000,
+        currency: "GHS",
+        status: "expired",
+        ticket_count: 1,
+        created_at: new Date(Date.now() - 3600000 * 24).toISOString(),
+      },
+    ],
+  });
+}
