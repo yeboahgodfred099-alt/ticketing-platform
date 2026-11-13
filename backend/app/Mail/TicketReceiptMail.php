@@ -91,3 +91,4 @@ class TicketReceiptMail extends Mailable
             "END:VCALENDAR\r\n";
     }
 }
+

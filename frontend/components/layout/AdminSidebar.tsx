@@ -20,6 +20,7 @@ export function AdminSidebar({ admin }: AdminSidebarProps) {
     { name: "Orders", href: "/admin/orders", icon: "📦" },
     { name: "Payments", href: "/admin/payments", icon: "💳" },
     { name: "Attendees", href: "/admin/attendees", icon: "👥" },
+    { name: "Gate Scanner", href: "/staff/scan", icon: "📷" },
     ...(isFinance ? [{ name: "Reports", href: "/admin/reports", icon: "📈" }] : []),
     ...(isSuperAdmin
       ? [

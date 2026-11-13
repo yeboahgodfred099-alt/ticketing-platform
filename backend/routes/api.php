@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\V1\Public\HealthController;
 use App\Http\Controllers\Api\V1\Public\PaymentController;
 use App\Http\Controllers\Api\V1\Public\PaystackWebhookController;
 use App\Http\Controllers\Api\V1\Public\TicketController;
+use App\Http\Controllers\Api\V1\Staff\CheckInController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -105,9 +106,14 @@ Route::prefix('public')->group(function () {
         ->name('api.v1.public.tickets.show');
 });
 
-// Gate Staff Route Group
+// Gate Staff Route Group (Phase 8)
 Route::prefix('staff')->middleware('auth:sanctum')->group(function () {
-    // Phase 8: Gate scan & atomic check-in
+    Route::post('/check-in', [CheckInController::class, 'checkIn'])
+        ->middleware('throttle:120,1')
+        ->name('api.v1.staff.check-in');
+    Route::get('/events/{event}/stats', [CheckInController::class, 'stats'])
+        ->middleware('throttle:60,1')
+        ->name('api.v1.staff.events.stats');
 });
 
 // Paystack Webhooks Route Group (Phase 6)

@@ -88,3 +88,4 @@ class SendTicketEmail implements ShouldQueue
         return "{$maskedName}@{$domain}";
     }
 }
+

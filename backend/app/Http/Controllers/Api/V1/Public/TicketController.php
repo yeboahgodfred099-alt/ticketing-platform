@@ -82,3 +82,4 @@ class TicketController extends Controller
         ], Response::HTTP_OK);
     }
 }
+

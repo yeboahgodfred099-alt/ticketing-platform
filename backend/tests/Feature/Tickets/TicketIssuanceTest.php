@@ -173,3 +173,4 @@ class TicketIssuanceTest extends TestCase
         $response->assertStatus(403);
     }
 }
+

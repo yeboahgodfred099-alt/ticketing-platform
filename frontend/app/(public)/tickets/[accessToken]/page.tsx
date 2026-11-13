@@ -218,3 +218,4 @@ export default function TicketRetrievalPage({ params }: TicketPageProps) {
     </div>
   );
 }
+
