@@ -31,9 +31,18 @@ export async function apiClient<T = unknown>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
+  let path = endpoint;
+  if (!endpoint.startsWith("http")) {
+    if (path.startsWith("/api/v1")) {
+      path = path.slice(7);
+    } else if (path.startsWith("api/v1")) {
+      path = path.slice(6);
+    }
+  }
+
   const url = endpoint.startsWith("http")
     ? endpoint
-    : `${API_BASE_URL}${endpoint.startsWith("/") ? "" : "/"}${endpoint}`;
+    : `${API_BASE_URL}${path.startsWith("/") ? "" : "/"}${path}`;
 
   const defaultHeaders: Record<string, string> = {
     Accept: "application/json",
