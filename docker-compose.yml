@@ -21,19 +21,28 @@ services:
     build:
       context: .
       dockerfile: infra/docker/backend/Dockerfile
+      args:
+        COMPOSER_WITH_DEV: "true"
     container_name: ticketing_backend
     restart: unless-stopped
     volumes:
       - ./backend:/var/www/html
+      - backend_vendor:/var/www/html/vendor
     environment:
       - APP_ENV=local
       - APP_DEBUG=true
+      - APP_KEY=${APP_KEY}
+      - APP_URL=${APP_URL:-http://localhost:8000}
       - DB_CONNECTION=pgsql
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_DATABASE=ticketing
       - DB_USERNAME=ticketing_app
       - DB_PASSWORD=secret_ticketing_password
+      - SESSION_DRIVER=${SESSION_DRIVER:-database}
+      - SESSION_DOMAIN=${SESSION_DOMAIN:-localhost}
+      - SESSION_SECURE_COOKIE=${SESSION_SECURE_COOKIE:-false}
+      - SANCTUM_STATEFUL_DOMAINS=${SANCTUM_STATEFUL_DOMAINS:-localhost:3000}
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - QUEUE_CONNECTION=redis
@@ -54,13 +63,17 @@ services:
     build:
       context: .
       dockerfile: infra/docker/backend/Dockerfile
+      args:
+        COMPOSER_WITH_DEV: "true"
     container_name: ticketing_queue
     restart: unless-stopped
     command: php artisan queue:work redis --sleep=3 --tries=3 --timeout=90
     volumes:
       - ./backend:/var/www/html
+      - backend_vendor:/var/www/html/vendor
     environment:
       - APP_ENV=local
+      - APP_KEY=${APP_KEY}
       - DB_CONNECTION=pgsql
       - DB_HOST=postgres
       - DB_PORT=5432
@@ -84,13 +97,17 @@ services:
     build:
       context: .
       dockerfile: infra/docker/backend/Dockerfile
+      args:
+        COMPOSER_WITH_DEV: "true"
     container_name: ticketing_scheduler
     restart: unless-stopped
     command: php artisan schedule:work
     volumes:
       - ./backend:/var/www/html
+      - backend_vendor:/var/www/html/vendor
     environment:
       - APP_ENV=local
+      - APP_KEY=${APP_KEY}
       - DB_CONNECTION=pgsql
       - DB_HOST=postgres
       - DB_PORT=5432
@@ -185,6 +202,8 @@ networks:
     internal: false
 
 volumes:
+  backend_vendor:
+    driver: local
   postgres_data:
     driver: local
   redis_data:

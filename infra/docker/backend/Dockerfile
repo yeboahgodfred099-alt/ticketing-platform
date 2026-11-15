@@ -7,6 +7,7 @@ RUN apk add --no-cache \
     libpq-dev \
     libpng-dev \
     libzip-dev \
+    libxml2-dev \
     zip \
     unzip \
     icu-dev \
@@ -23,6 +24,10 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         pgsql \
         bcmath \
         pcntl \
+        mbstring \
+        dom \
+        xml \
+        xmlwriter \
         gd \
         zip \
         intl \
@@ -41,9 +46,24 @@ COPY infra/docker/backend/php.ini /usr/local/etc/php/conf.d/custom.ini
 
 WORKDIR /var/www/html
 
-# Create system user to run Composer and Artisan Commands
+# Create system user to run PHP-FPM
 RUN addgroup -g 1000 -S www && \
     adduser -u 1000 -S www -G www
+
+ARG COMPOSER_WITH_DEV=false
+
+COPY backend/ /var/www/html/
+
+RUN mkdir -p storage/app/public storage/framework/cache/data storage/framework/sessions \
+    storage/framework/views storage/logs bootstrap/cache \
+    && if [ "$COMPOSER_WITH_DEV" = "true" ]; then \
+        composer install --no-interaction --prefer-dist --no-scripts; \
+    else \
+        composer install --no-interaction --prefer-dist --no-dev --no-scripts; \
+    fi \
+    && composer dump-autoload --optimize --no-scripts \
+    && php artisan package:discover --ansi \
+    && chown -R www:www storage bootstrap/cache vendor
 
 USER www
 

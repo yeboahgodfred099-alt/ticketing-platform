@@ -78,6 +78,15 @@ ticketing-platform/
 cp .env.example .env
 ```
 
+Build the backend images, generate a Laravel key, and set the generated value
+as `APP_KEY` in `.env` before starting the services. Keep the key private and
+stable; do not generate a replacement for an existing installation.
+
+```bash
+docker compose build backend queue scheduler
+docker compose run --rm --no-deps backend php artisan key:generate --show
+```
+
 Review `.env` and configure your Paystack test API keys if testing live sandbox payments:
 ```env
 PAYSTACK_PUBLIC_KEY=pk_test_...
@@ -88,7 +97,7 @@ PAYSTACK_WEBHOOK_SECRET=
 ### Step 2: Start the Development Containers
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 This spins up:
@@ -101,13 +110,13 @@ This spins up:
 ### Step 3: Run Database Migrations & Seeds
 
 ```bash
-docker-compose exec backend php artisan migrate --seed
+docker compose exec backend php artisan migrate --seed
 ```
 
 ### Step 4: Bootstrap the First Super Admin
 
 ```bash
-docker-compose exec backend php artisan admin:create-super
+docker compose exec backend php artisan admin:create-super
 ```
 Follow the interactive prompt to enter the Super Admin name, email, and password. MFA setup is enforced on first login.
 

@@ -48,7 +48,7 @@ services:
     container_name: ticketing_prod_backend
     restart: unless-stopped
     volumes:
-      - ./backend:/var/www/html
+      - backend_storage:/var/www/html/storage
     environment:
       - APP_ENV=production
       - APP_DEBUG=false
@@ -99,7 +99,7 @@ services:
     restart: unless-stopped
     command: php artisan queue:work redis --sleep=3 --tries=3 --timeout=90
     volumes:
-      - ./backend:/var/www/html
+      - backend_storage:/var/www/html/storage
     environment:
       - APP_ENV=production
       - APP_KEY=${APP_KEY}
@@ -131,7 +131,7 @@ services:
     restart: unless-stopped
     command: php artisan schedule:work
     volumes:
-      - ./backend:/var/www/html
+      - backend_storage:/var/www/html/storage
     environment:
       - APP_ENV=production
       - APP_KEY=${APP_KEY}
@@ -202,6 +202,8 @@ networks:
     internal: true
 
 volumes:
+  backend_storage:
+    driver: local
   postgres_prod_data:
     driver: local
   redis_prod_data:
